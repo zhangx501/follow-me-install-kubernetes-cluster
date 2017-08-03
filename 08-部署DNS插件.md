@@ -47,7 +47,28 @@ subjects:
 
 ## 配置 kube-dns ServiceAccount
 
-无需修改；
+``` bash
+cat kubedns-sa.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+```
+
+``` bash
+cat  kubedns-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+```
 
 ## 配置 `kube-dns` 服务
 

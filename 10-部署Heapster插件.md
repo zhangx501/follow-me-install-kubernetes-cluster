@@ -44,7 +44,29 @@ $ diff grafana-deployment.yaml.orig grafana-deployment.yaml
 
 + 如果后续使用 kube-apiserver 或者 kubectl proxy 访问 grafana dashboard，则必须将 `GF_SERVER_ROOT_URL` 设置为 `/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/`，否则后续访问grafana时访问时提示找不到`http://10.64.3.7:8086/api/v1/proxy/namespaces/kube-system/services/monitoring-grafana/api/dashboards/home` 页面；
 
+## 配置 heapster-heapster-rbac.yaml
+``` bash
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: heapster
+  namespace: kube-system
 
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: heapster
+subjects:
+  - kind: ServiceAccount
+    name: heapster
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:heapster
+  apiGroup: rbac.authorization.k8s.io
+```
 ## 配置 heapster-deployment
 
 ``` bash
